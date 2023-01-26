@@ -1,0 +1,39 @@
+# -- Makefile for NETCPHD
+
+ASM     =  tasm
+CC      =  bcc
+LINKER  =  tlink
+LIBRARY =  tlib
+LIB     =  pktdrv.lib
+OPTION  =  -1 -O -G -Z -d -w
+
+OBJ     =  bcast.obj
+TARGET  =  bcast.exe
+
+all          :  $(TARGET)
+clean        :
+                -del $(OBJ)
+
+distclean    :
+                -del $(TARGET) $(LIB)
+
+bcast.exe    :  bcast.obj $(LIB)
+                $(CC) $(OPTION) -e$@ $**
+
+
+.c.obj       :
+                $(CC) -c $(OPTION) $<
+
+.cc.obj      :
+                $(CC) -c -P $(OPTION) $<
+
+.asm.obj     :
+                $(ASM) -ml -w2 $<;
+
+.obj.lib     :
+                $(LIBRARY) $@-+$<
+
+pktdrv.lib   :  pktdrv.obj
+                $(LIBRARY) /C $@ -+ $**
+
+
